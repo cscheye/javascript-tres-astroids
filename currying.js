@@ -10,20 +10,18 @@ var sum = function () {
 
 Function.prototype.curry = function (n, itemArr) {
   var itemArr = itemArr || [];
+  var fn = this;
 
-
-  return function () {
-
+  return function innerCurry() {
     for (var i = 0; i < arguments.length; i++) {
        itemArr.push(arguments[i]);
      }
-
     if (itemArr.length === n){
       return this.apply(this, itemArr);
     } else {
-      return this.curry(n, itemArr);
+      return innerCurry.bind(this);
     }
-  }.bind(this);
+  }.bind(fn);
 };
 
 function curriedSum (n) {

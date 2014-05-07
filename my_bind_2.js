@@ -1,9 +1,10 @@
 
 Function.prototype.myBind = function (obj) {
   var fn = this;
-  var args = [].slice.call(arguments, 1, arguments.length);
+  var args = [].slice.call(arguments, 1);
   return function () {
-    console.log(args);
+    var args2 = [].slice.call(arguments);
+    args = args.concat(args2);
     fn.apply(obj, args);
   }
 }
