@@ -36,6 +36,21 @@
     }
   };
 
+  Game.prototype.bindKeyHandlers = function(){
+    var ship = this.ship;
+    key('down', function(){
+      ship.power([0, 2]);
+    });
+    key('up', function(){
+      ship.power([0, -2]);
+    });
+    key('left', function(){
+      ship.power([-2, 0]);
+    });
+    key('right', function(){
+      ship.power([2, 0]);
+    });
+  }
 
   Game.prototype.stop = function(){
     clearInterval(this.timerId);
@@ -59,6 +74,7 @@
   };
 
   Game.prototype.step = function(){
+    this.bindKeyHandlers();
     this.move();
     this.removeOffBoardAsteroids();
     this.addAsteroids(Math.floor(Math.random() * 1.2));
