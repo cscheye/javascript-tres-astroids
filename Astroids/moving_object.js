@@ -1,4 +1,10 @@
 (function (root) {
+  Function.prototype.inherits = function (obj) {
+    function Surrogate () {};
+    Surrogate.prototype = obj.prototype;
+    this.prototype = new Surrogate ();
+  }
+
  var Asteroids = root.Asteroids = (root.Asteroids || {});
 
   var MovingObject =
@@ -41,7 +47,7 @@
     var minDist = this.radius + otherObj.radius;
 
     var distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-    return (minDist <= distance);
+    return (minDist >= distance);
   };
 
 })(this);
