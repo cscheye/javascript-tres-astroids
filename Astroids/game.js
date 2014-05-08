@@ -26,6 +26,27 @@
     }
   };
 
+  Game.prototype.removeOffBoardBullets = function() {
+    var bullets = this.ship.bullets;
+    for (var i = 0; i < bullets.length; i++) {
+      if (bullets[i].pos[0] > Game.DIM_X){
+        bullets.splice(i, 1);
+      }
+    }
+  };
+
+  Game.prototype.resetShip = function () {
+    var shipX = this.ship.pos[0];
+    var shipY = this.ship.pos[1];
+
+
+    if (shipX < 0 || shipX > Game.DIM_X || shipY < 0 || shipY > Game.DIM_Y) {
+      this.ship.pos[0] = Game.DIM_X / 5;
+      this.ship.pos[1] = Game.DIM_Y / 2;
+    }
+     console.log(shipX, shipY, this.ship.pos);
+  };
+
   Game.prototype.checkCollisions = function () {
     var asteroids = this.asteroids;
     for(var i = 0; i < asteroids.length; i++){
@@ -36,6 +57,26 @@
     }
   };
 
+  Game.prototype.removeHitAsteroids = function(){
+    var bullets = this.ship.bullets;
+    var asteroids = this.asteroids;
+    for(var i = 0; i < bullets.length; i++){
+      for(var j = 0; j < asteroids.length; j++){
+        console.log("I'm in the loop!");
+        if (bullets[i].hitAsteroids(asteroids[j])){
+          console.log("I evaluated!");
+          asteroids.splice(j, 1);
+          bullets.splice(i, 1);
+        }
+      }
+    }
+  };
+
+  Game.prototype.outOfBounds = function () {
+    this.removeOffBoardAsteroids();
+    this.removeOffBoardBullets();
+    this.resetShip();
+  }
 
   Game.prototype.bindKeyHandlers = function(){
     var ship = this.ship;
@@ -87,10 +128,10 @@
   };
 
   Game.prototype.step = function(){
-
     this.move();
-    this.removeOffBoardAsteroids();
+    this.outOfBounds();
     this.addAsteroids(Math.floor(Math.random() * 1.2));
+    this.removeHitAsteroids();
     this.draw();
     this.checkCollisions();
   };
